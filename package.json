@@ -1,0 +1,17 @@
+{
+  "name": "vito-api",
+  "version": "1.0.0",
+  "description": "api-server by vito",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "vito",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.13",
+    "socket.io": "^2.2.0"
+  }
+}
