@@ -6,5 +6,5 @@ class BookModel extends BasicModel {
 }
 exports.model = new BookModel(db, 'book', {
     name: '',
-    keywodrs: []
+    keywords: []
 })
