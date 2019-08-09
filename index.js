@@ -1,20 +1,18 @@
 const express = require('express')
 const app = express()
 const http = require('http').Server(app)
-const io = require('socket.io')(http)
-const path = require('path')
-const bodyParser = require('body-parser')
+//const io = require('socket.io')(http)
 const PORT = process.env.PORT || 5000
-
+//modules
 const db = require('./db').DB
 const router = require('./routers')
+const middleware = require('./middlewares')
+const header = require('./headers')
 
 //middleware
-app.use(express.static(path.join(__dirname, 'public/build')));
-//bodyParser
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+middleware(app)
 //addHeaders
+header(app)
 //routes
 app.use(router)
 //db connects

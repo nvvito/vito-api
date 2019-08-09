@@ -1,12 +1,12 @@
 const router = require('express').Router()
-//model
-const method = require('../../controllers/book').method
+const controller = require('../../controllers/book').controller
+
 //router
-router.get('/', method.getAll)
-router.get('/:id', method.getOneById)
-router.post('/', method.createOne)
-router.put('/:id', method.updateOneById)
-router.delete('/:id', method.deleteOneById)
+router.get('/', controller.getAll)
+router.get('/:id', controller.getOneById)
+router.post('/', controller.createOne)
+router.put('/:id', controller.updateOneById)
+router.delete('/:id', controller.deleteOneById)
 //custom method
 
 //export

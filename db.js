@@ -1,24 +1,23 @@
 const MongoClient = require('mongodb').MongoClient
 //DB
-class DB {
-    constructor(db_name = 'api') {
-        this.db_name = db_name
-        this.db = null
-    }
-    connect(url, cb) {
-        if (this.db) {
+function DB(_db_name = 'api') {
+    let db_name = _db_name
+    let db = null
+
+    this.connect = (url, cb) => {
+        if (db) {
             return cb()
         }
-        MongoClient.connect(url, { useNewUrlParser: true }, (err, db) => {
+        MongoClient.connect(url, { useNewUrlParser: true }, (err, _db) => {
             if (err) return cb(err)
-            this.db = db
+            db = _db
             cb()
         })
     }
-    getDB() {
-        return this.db.db(this.db_name)
+    this.getDB = () => {
+        return db.db(db_name)
     }
-    getCollection(name) {
+    this.getCollection = (name) => {
         return this.getDB().collection(name)
     }
 }

@@ -1,6 +1,6 @@
 const router = require('express').Router()
 //model
-const method = require('../../controllers/user').method
+const method = require('../../controllers/user').controller
 //router
 router.get('/', method.getAll)
 router.get('/:id', method.getOneById)

@@ -1,25 +1,30 @@
 const ObjectID = require('mongodb').ObjectID
 
-class BasicModel {
-    constructor(db, collection, schema) {
-        this.db = db
-        this.schema = schema
-        this.collection = collection
+//basic model
+function BasicModel(_db, _collection, _schema) {
+    //private field
+    const db = _db
+    const schema = _schema
+    const collection = _collection
+    //public field
+
+    //private method
+
+    //public method
+    this.createEmpty = () => {
+        return { ...schema }
     }
-    createEmpty() {
-        return { ...this.schema }
+    this.updateData = (data, newData) => {
+        let _data = {}
+        Object.keys(data).map(key => _data[key] = newData[key] !== undefined ? newData[key] : data[key])
+        return _data
     }
-    updateData(date, newDate) {
-        let _date = {}
-        Object.keys(date).map(key => _date[key] = newDate[key] !== undefined ? newDate[key] : date[key])
-        return _date
+    this.createDocument = (data) => {
+        return this.updateData(this.createEmpty(), data)
     }
-    createDocument(date) {
-        return this.updateData(this.createEmpty(), date)
-    }
-    async getAll() {
+    this.getAll = async () => {
         try {
-            let result = await this.db.getCollection(this.collection).find({}).toArray()
+            let result = await db.getCollection(collection).find({}).toArray()
             return result
         } catch (err) {
             return {
@@ -28,10 +33,10 @@ class BasicModel {
             }
         }
     }
-    async getOneById(id) {
+    this.getOneById = async (id) => {
         if (ObjectID.isValid(id)) {
             try {
-                let result = await this.db.getCollection(this.collection).findOne({ _id: ObjectID(id) })
+                let result = await db.getCollection(collection).findOne({ _id: ObjectID(id) })
                 return result
             } catch (err) {
                 return {
@@ -46,9 +51,9 @@ class BasicModel {
             }
         }
     }
-    async createOne(data) {
+    this.createOne = async (data) => {
         try {
-            let result = await this.db.getCollection(this.collection).insertOne(this.createDocument(data))
+            let result = await db.getCollection(collection).insertOne(this.createDocument(data))
             return result
         } catch (err) {
             return {
@@ -57,26 +62,31 @@ class BasicModel {
             }
         }
     }
-    async updateOneById(id, data) {
-        let validDate = {}
+    this.updateOneById = async (id, data) => {
+        let validData = {}
         let empty = this.createEmpty()
         Object.keys(data).map(key => {
-            if (Object.keys(empty).indexOf(key) !== -1) validDate[key] = data[key]
+            if (Object.keys(empty).indexOf(key) !== -1) validData[key] = data[key]
         })
-        try {
-            let result = await this.db.getCollection(this.collection).findOneAndUpdate({ _id: ObjectID(id) }, { $set: validDate }, { returnOriginal: false })
-            return result
-        } catch (err) {
-            return {
-                error: true,
-                error_message: err
+        if (Object.keys(validData).length) {
+            try {
+                let result = await db.getCollection(collection).findOneAndUpdate({ _id: ObjectID(id) }, { $set: validData }, { returnOriginal: false })
+                return result
+            } catch (err) {
+                return {
+                    error: true,
+                    error_message: err
+                }
             }
+        } else return {
+            error: true,
+            error_message: 'invalid data'
         }
     }
-    async deleteOneById(id) {
+    this.deleteOneById = async (id) => {
         if (ObjectID.isValid(id)) {
             try {
-                let result = await this.db.getCollection(this.collection).findOneAndDelete({ _id: ObjectID(id) })
+                let result = await db.getCollection(collection).findOneAndDelete({ _id: ObjectID(id) })
                 return result
             } catch (err) {
                 return {
@@ -92,4 +102,6 @@ class BasicModel {
         }
     }
 }
+
+//export
 exports.basic = BasicModel
